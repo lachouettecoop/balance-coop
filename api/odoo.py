@@ -76,23 +76,19 @@ def _save_in_file(products):
         json.dump(products, json_file)
 
 
-def _consolidate(products: List[Dict]) -> Dict:
-    cid_to_c = {}
-    for c, cids in config.odoo.categories.items():
-        for cid in cids:
-            cid_to_c[cid] = c
-    for product in products:
-        product["bio"] = product["name"].find(" Bio") >= 0
-        if product["barcode"] and product["barcode"][0:3] == "260":
+def _consolidate(all_products: List[Dict]) -> Dict:
+    products = []
+    for product in all_products:
+        if " Vrac" in product["name"] and product["barcode"] and product["barcode"][0:3] == "260":
+            products.append(product)
+            product["bio"] = product["name"].find(" Bio") >= 0
             product["id"] = int(product["barcode"][3:7])
-        else:
-            product["id"] = None
-        categ_id = product["categ_id"][0]
-        product["category"] = cid_to_c[categ_id]
-        name = product["name"]
-        for p in unp:
-            name = p.sub("", name)
-        product["name"] = name.strip()
+            product["category"] = "vrac"
+            name = product["name"]
+            for p in unp:
+                name = p.sub("", name)
+            product["name"] = name.strip()
+    logging.info(f"{len(products)} products loaded")
     return {
         "date": datetime.now().strftime("%d/%m/%y %H:%M"),
         "products": products,
@@ -102,12 +98,10 @@ def _consolidate(products: List[Dict]) -> Dict:
 def variable_weight_products():
     try:
         odoo_api = OdooAPI()
-        cids = [cid for cids in config.odoo.categories.values() for cid in cids]
         products = odoo_api.search_read(
             "product.product",
             cond=[
                 ["sale_ok", "=", True],
-                ["categ_id", "in", cids],
             ],
             fields=[
                 "barcode",
