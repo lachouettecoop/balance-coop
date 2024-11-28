@@ -5,7 +5,7 @@ import re
 import ssl
 import xmlrpc.client
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, AnyStr
 
 from api import config
 
@@ -76,44 +76,44 @@ def _save_in_file(products):
         json.dump(products, json_file)
 
 
-def _consolidate(all_products: List[Dict]) -> Dict:
+def _consolidate(all_products: List[Dict], category: AnyStr) -> List[Dict]:
     products = []
     for product in all_products:
-        if " Vrac" in product["name"] and product["barcode"] and product["barcode"][0:3] == "260":
-            products.append(product)
-            product["bio"] = product["name"].find(" Bio") >= 0
-            product["id"] = int(product["barcode"][3:7])
-            product["category"] = "vrac"
-            name = product["name"]
-            for p in unp:
-                name = p.sub("", name)
-            product["name"] = name.strip()
+        products.append(product)
+        product["bio"] = product["name"].find(" Bio") >= 0
+        product["id"] = int(product["barcode"][3:7])
+        product["category"] = category
+        name = product["name"]
+        for p in unp:
+            name = p.sub("", name)
+        product["name"] = name.strip()
     logging.info(f"{len(products)} products loaded")
-    return {
-        "date": datetime.now().strftime("%d/%m/%y %H:%M"),
-        "products": products,
-    }
+    return products
 
 
 def variable_weight_products():
     try:
-        odoo_api = OdooAPI()
-        products = odoo_api.search_read(
-            "product.product",
-            cond=[
-                ["sale_ok", "=", True],
-            ],
-            fields=[
-                "barcode",
-                "categ_id",
-                "image_medium",
-                "name",
-                "theoritical_price",
-            ],
-            order="name ASC",
-        )
-        logging.info(f"{len(products)} products found")
-        data = _consolidate(products)
+        products = []
+        for category, conditions in config.odoo.categories.items():
+            odoo_api = OdooAPI()
+            _products = odoo_api.search_read(
+                "product.product",
+                cond=[["sale_ok", "=", True]] + conditions,
+                fields=[
+                    "barcode",
+                    "categ_id",
+                    "image_medium",
+                    "name",
+                    "theoritical_price",
+                ],
+                order="name ASC",
+            )
+            logging.info(f"{len(_products)} products found for {category}")
+            products += _consolidate(_products, category)
+        data = {
+            "date": datetime.now().strftime("%d/%m/%y %H:%M"),
+            "products": products,
+        }
         _save_in_file(data)
         data["synced"] = True
         return data
