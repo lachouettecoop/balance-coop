@@ -4,7 +4,7 @@ import os
 
 from dotmap import DotMap
 from ruamel.yaml import YAML
-from validx import Bool, Dict, Int, List, Str
+from validx import Bool, Dict, List, Str, Any
 
 CONFIG_PATH = os.getenv("CONFIG_PATH", "/app/cfg/config.yml")
 
@@ -17,7 +17,7 @@ SCHEMA = Dict(
                 "db": Str(),
                 "user": Str(),
                 "passwd": Str(),
-                "categories": Dict(extra=(Str(), List(Int()))),
+                "categories": Dict(extra=(Str(), List(Any()))),
                 "unp": List(Str()),
             }
         ),
