@@ -76,18 +76,18 @@ def _save_in_file(products):
         json.dump(products, json_file)
 
 
-def _consolidate(all_products: List[Dict], category: AnyStr) -> List[Dict]:
-    products = []
-    for product in all_products:
-        products.append(product)
-        product["bio"] = product["name"].find(" Bio") >= 0
-        product["id"] = int(product["barcode"][3:7])
+def _consolidate(products: List[Dict], category: AnyStr) -> List[Dict]:
+    for product in products:
+        product["bio"] = product["name"].lower().find(" bio") >= 0
+        if product["barcode"] and product["barcode"][0:3] == "260":
+            product["id"] = int(product["barcode"][3:7])
+        else:
+            product["id"] = None
         product["category"] = category
         name = product["name"]
         for p in unp:
             name = p.sub("", name)
         product["name"] = name.strip()
-    logging.info(f"{len(products)} products loaded")
     return products
 
 
