@@ -68,7 +68,7 @@ poetry run python main.py
 ### Scale
 We use a Bizerba scale. This product can stream its screen on the port 1240.
 We use this stream to get weight and tare.
-This option shall be activated on the device.
+This option shall be activated on the device (5->3->8->3->2->6).
 
 ### Printer
 We use an Epson TM T88v-i. It's a network printer.

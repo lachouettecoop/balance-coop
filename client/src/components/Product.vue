@@ -54,11 +54,11 @@
           >
             <template v-if="variableWeightProduct()">
               <h3>Id. {{ product.id }}</h3>
-              <h3><br/>{{ asEuro(product.theoritical_price) }} / kg</h3>
+              <h3><br/>{{ asEuro(product.lst_price) }} / kg</h3>
             </template>
             <template v-else>
               <h3>Vendu à la pièce</h3>
-              <h3><br/>{{ asEuro(product.theoritical_price) }}</h3>
+              <h3><br/>{{ asEuro(product.lst_price) }}</h3>
             </template>
             <v-img
               v-if="product.bio"
@@ -259,7 +259,7 @@ export default {
     },
     asEuro,
     price() {
-      let price = this.product.theoritical_price * this.weight;
+      let price = this.product.lst_price * this.weight;
       if (this.discount20) {
         price *= 0.8;
       } else if (this.discount50) {
@@ -276,6 +276,12 @@ export default {
     },
     printLabel(cut) {
       this.printInProgress = true;
+      if (this.product.id) {
+        this.$store.dispatch({
+          type: 'antifreeze/add',
+          weight: this.weight,
+        });
+      }
       print(
         this.product,
         this.$store.state.ticket.labels.length + 1,
