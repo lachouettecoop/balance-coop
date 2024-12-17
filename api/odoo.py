@@ -104,7 +104,7 @@ def variable_weight_products():
                     "categ_id",
                     "image_medium",
                     "name",
-                    "theoritical_price",
+                    "lst_price",
                 ],
                 order="name ASC",
             )

@@ -161,6 +161,20 @@
             </h5>
           </v-col>
         </v-row>
+<!--
+<v-row v-if="lastSyncDate" style="max-height: 10%">
+  <v-col>
+    <h5 :class="isSynced?'white&#45;&#45;text text-right':'orange&#45;&#45;text text-right'">
+      Antifreeze:
+    </h5>
+  </v-col>
+  <v-col>
+    <h5 :class="isFreezed?'white&#45;&#45;text':'orange&#45;&#45;text'">
+      {{ isFreezed?"TRUE":"FALSE" }}
+    </h5>
+  </v-col>
+</v-row>
+-->
       </v-col>
       <Products
         :filter="filter"
@@ -212,6 +226,9 @@ export default {
     },
     isSynced() {
       return this.$store.state.products.synced;
+    },
+    isFreezed() {
+      return this.$store.state.antifreeze.weights.length > 2;
     },
     lastSyncDate() {
       return this.$store.state.products.date;

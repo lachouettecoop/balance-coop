@@ -46,9 +46,9 @@ def print_product_label(product, nb, weight, discount=0.0, cut=False, retry=0):
                 title = f"{nb}) {title}"
             printer.textln(title)
 
-            theoritical_price = product.get("theoritical_price")
-            price = theoritical_price * weight
-            printer.textln(f"{theoritical_price:.3f} €/kg  / {price:.3f} €  *")
+            lst_price = product.get("lst_price")
+            price = lst_price * weight
+            printer.textln(f"{lst_price:.3f} €/kg  / {price:.3f} €  *")
 
             if discount > 0.0:
                 printer.ln()
