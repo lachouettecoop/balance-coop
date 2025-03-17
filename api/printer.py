@@ -62,7 +62,7 @@ def print_product_label(product, nb, weight, discount=0.0, cut=False, retry=0):
                 cg = math.floor(weight * 1000)  # grams
                 barcode = f"{product.get('barcode')[0:7]}{cg:05d}"
                 printer.ln()
-                printer.barcode(barcode, "EAN13", height=128, width=2)
+                printer.barcode(barcode, "EAN13", height=175, width=3)
             else:
                 printer.set(align="center", bold=True, double_width=True, double_height=True)
                 printer.ln()
@@ -70,7 +70,7 @@ def print_product_label(product, nb, weight, discount=0.0, cut=False, retry=0):
                 printer.set(align="center", bold=True)
                 if product.get("barcode"):
                     printer.ln()
-                    printer.barcode(product.get("barcode"), "EAN13", height=128, width=2)
+                    printer.barcode(product.get("barcode"), "EAN13", height=175, width=3)
 
             printer.ln()
             printer.textln("---")
