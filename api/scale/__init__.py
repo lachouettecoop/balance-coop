@@ -9,6 +9,14 @@ from api.scale.screen import Screen
 
 
 class Scale(Thread):
+
+    _last_printed_weight: float
+    """The last weight sent to the printer.
+    
+    If the same weight is sent twice in a row,
+    a warning is shown to the user to check that the scale is still working properly.
+    """
+
     def __init__(self, socket_io):
         super(Scale, self).__init__()
         self._socket_io = socket_io
@@ -18,6 +26,7 @@ class Scale(Thread):
         self._weight = 0.0
         self._tare = 0.0
         self._last_status = {}
+        self._last_printed_weight = -1.0
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.stop()
@@ -88,3 +97,19 @@ class Scale(Thread):
     def stop(self):
         self._keep_running = False
         self.clear()
+
+    def check_weight(self, weight: float) -> bool:
+        """Check that the weight is different from the last printed one.
+
+        This is run before sending the weight to the printer.
+        
+        Args:
+            weight: The measured weight to be printed.
+        
+        Returns:
+            Whether the weight is different from the last printed one.
+        """
+        if weight == self._last_printed_weight:
+            return False
+        self._last_printed_weight = weight
+        return True

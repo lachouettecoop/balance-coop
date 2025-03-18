@@ -50,10 +50,13 @@ def products():
 @app.route("/print_label", methods=["POST"])
 def print_label():
     data = request.json
+    weight = data.get("weight", 0.0)
+    weight_ok = scale["scale"].check_weight(weight)
+    # TODO: pop-up if not weight_ok
     print_product_label(
         data.get("product", {}),
         data.get("nb", 0),
-        data.get("weight", 0.0),
+        weight,
         data.get("discount", 0.0),
         data.get("cut", False),
     )
