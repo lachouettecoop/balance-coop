@@ -161,20 +161,6 @@
             </h5>
           </v-col>
         </v-row>
-<!--
-<v-row v-if="lastSyncDate" style="max-height: 10%">
-  <v-col>
-    <h5 :class="isSynced?'white&#45;&#45;text text-right':'orange&#45;&#45;text text-right'">
-      Antifreeze:
-    </h5>
-  </v-col>
-  <v-col>
-    <h5 :class="isFreezed?'white&#45;&#45;text':'orange&#45;&#45;text'">
-      {{ isFreezed?"TRUE":"FALSE" }}
-    </h5>
-  </v-col>
-</v-row>
--->
       </v-col>
       <Products
         :filter="filter"
@@ -183,6 +169,21 @@
       />
     </v-row>
   </v-container>
+  <div>
+    <v-dialog v-model="showDialog" persistent max-width="400">
+      <v-card>
+        <v-card-text>
+          Les deux dernières pesées sont identiques.
+          Vérfiez le bon fonctionnement de la balance.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="hidePopup">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -216,6 +217,11 @@ export default {
         this.filter = null;
       }
     },
+    scaleFrozen() {
+      if (this.scaleFrozen()) {
+        this.showDialog = true;
+      }
+    }
   },
   computed: {
     labels() {
@@ -227,8 +233,8 @@ export default {
     isSynced() {
       return this.$store.state.products.synced;
     },
-    isFreezed() {
-      return this.$store.state.antifreeze.weights.length > 2;
+    scaleFrozen() {
+      return this.$store.state.scale.frozen;
     },
     lastSyncDate() {
       return this.$store.state.products.date;
@@ -279,6 +285,10 @@ export default {
       }
       this.filter = null;
     },
+    hidePopup() {
+      this.showDialog = false;
+      this.$store.dispatch("scale/resetFrozenScale");
+    }
   },
 };
 </script>
