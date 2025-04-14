@@ -1,5 +1,18 @@
 <template>
   <v-container fluid>
+    <v-dialog v-model="showDialog" persistent max-width="400">
+      <v-card>
+        <v-card-text>
+          Les deux dernières pesées sont identiques.
+          Vérfiez le bon fonctionnement de la balance.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="hidePopup">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col
         cols="2"
@@ -169,21 +182,6 @@
       />
     </v-row>
   </v-container>
-  <div>
-    <v-dialog v-model="showDialog" persistent max-width="400">
-      <v-card>
-        <v-card-text>
-          Les deux dernières pesées sont identiques.
-          Vérfiez le bon fonctionnement de la balance.
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="hidePopup">OK</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
 </template>
 
 <script>
@@ -207,6 +205,7 @@ export default {
     filter: null,
     freeze: false,
     searchOpened: false,
+    showDialog: false,
   }),
   created() {
     this.refreshProducts();
@@ -221,7 +220,7 @@ export default {
       if (this.scaleFrozen()) {
         this.showDialog = true;
       }
-    }
+    },
   },
   computed: {
     labels() {
@@ -287,8 +286,8 @@ export default {
     },
     hidePopup() {
       this.showDialog = false;
-      this.$store.dispatch("scale/resetFrozenScale");
-    }
+      this.$store.dispatch('scale/resetFrozenScale');
+    },
   },
 };
 </script>

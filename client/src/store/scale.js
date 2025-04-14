@@ -51,7 +51,7 @@ const scale = {
     },
     resetFrozenScale(context) {
       context.commit('resetFrozen');
-    }
+    },
   },
   mutations: {
     setScaleStatus(state, scaleStatus) {
@@ -78,7 +78,7 @@ const scale = {
       state.error = null;
     },
     setFrozen(state) {
-        state.isFrozen = true;
+      state.isFrozen = true;
     },
     resetFrozen(state) {
       state.lastWeight = undefined;

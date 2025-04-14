@@ -29,10 +29,10 @@ class Scale(Thread):
                 import random
 
                 self._healthy = True
-                #self._weight = 1.2
-                #self._tare = 0
-                self._weight = random.random()
-                self._tare = random.random()
+                self._weight = 1.2
+                self._tare = 0
+                #self._weight = random.random()
+                #self._tare = random.random()
                 self._notify()
             else:
                 try:
