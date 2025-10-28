@@ -79,8 +79,6 @@ def print_product_label(product, nb, weight, discount=0.0, cut=False, retry=0):
             printer.image(img_source="logo.jpg")
             printer.textln("* Les prix seront calculés en caisse")
             printer.textln("Seul le poid est encodé sur le code-barres")
-            printer.ln()
-            printer.textln(datetime.now().strftime("%m/%d/%Y - %H:%M"))
             printer.cut()
         printer.close()
     except Exception as e:
