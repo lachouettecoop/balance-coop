@@ -278,7 +278,7 @@ export default {
       this.printInProgress = true;
       if (this.product.id) {
         this.$store.dispatch({
-          type: 'antifreeze/add',
+          type: 'scale/checkWeight',
           weight: this.weight,
         });
       }

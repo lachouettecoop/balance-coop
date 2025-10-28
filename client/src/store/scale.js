@@ -8,6 +8,8 @@ const initialState = {
   error: null,
   starting_sid: null,
   current_sid: null,
+  lastWeight: undefined,
+  frozen: false,
 };
 
 const getters = {
@@ -16,6 +18,7 @@ const getters = {
   tare: (state) => state.tare,
   connected: (state) => state.connected,
   error: (state) => state.error,
+  frozen: (state) => state.frozen,
 };
 
 const scale = {
@@ -41,6 +44,14 @@ const scale = {
     WS_error(context, message) {
       context.commit('setError', message.error);
     },
+    checkWeight(context, weight) {
+      if (!context.state.lastWeight === weight) {
+        context.commit('setFrozen');
+      }
+    },
+    resetFrozenScale(context) {
+      context.commit('resetFrozen');
+    },
   },
   mutations: {
     setScaleStatus(state, scaleStatus) {
@@ -65,6 +76,13 @@ const scale = {
     },
     resetError(state) {
       state.error = null;
+    },
+    setFrozen(state) {
+      state.isFrozen = true;
+    },
+    resetFrozen(state) {
+      state.lastWeight = undefined;
+      state.isFrozen = false;
     },
   },
 };
