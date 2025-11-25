@@ -2,8 +2,9 @@ import logging
 import math
 import socket
 import time
-from datetime import datetime
 
+from barcode import EAN13
+from barcode.writer import ImageWriter
 from escpos.printer import Network
 from flask import abort
 
@@ -62,7 +63,10 @@ def print_product_label(product, nb, weight, discount=0.0, cut=False, retry=0):
                 cg = math.floor(weight * 1000)  # grams
                 barcode = f"{product.get('barcode')[0:7]}{cg:05d}"
                 printer.ln()
-                printer.barcode(barcode, "EAN13", height=175, width=3)
+                printer.set(align="center", bold=False, double_width=False, double_height=False)
+                barcode_img = EAN13(barcode, writer=ImageWriter()).render()
+                rotated = barcode_img.rotate(90, expand=True)
+                printer.image(rotated)
             else:
                 printer.set(align="center", bold=True, double_width=True, double_height=True)
                 printer.ln()
