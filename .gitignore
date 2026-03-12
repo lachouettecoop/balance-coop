@@ -5,6 +5,8 @@ data/
 __pycache__/
 .venv/
 *.pyc
+# uv
+.python-version
 # Pycharm project file
 .idea/
 # NPM

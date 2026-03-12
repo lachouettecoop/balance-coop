@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 const initialState = {
   healthy: false,
   weight: 0.0,
@@ -26,13 +24,12 @@ const scale = {
   state: initialState,
   getters,
   actions: {
-    WS_connect(context) {
+    WS_connect(context, socket) {
       context.commit('setConnected', true);
-      // set sids
       if (!context.state.starting_sid) {
-        context.commit('set_starting_sid', Vue.prototype.$socket.id);
+        context.commit('set_starting_sid', socket.id);
       }
-      context.commit('set_current_sid', Vue.prototype.$socket.id);
+      context.commit('set_current_sid', socket.id);
     },
     WS_disconnect(context) {
       context.commit('setConnected', false);

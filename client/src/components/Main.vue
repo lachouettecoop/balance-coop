@@ -9,7 +9,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="hidePopup">OK</v-btn>
+          <v-btn color="primary" variant="text" @click="hidePopup">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -25,9 +25,8 @@
         <v-row no-gutters>
           <v-btn-toggle
             v-model="productsCategory"
-            color="deep-purple accent-3"
+            color="deep-purple-accent-3"
             class="filters"
-            tile
             group>
             <v-container
               class="filters d-flex flex-column pa-0 ma-0 justify-space-around"
@@ -43,26 +42,20 @@
             </v-container>
           </v-btn-toggle>
         </v-row>
-        <v-row class="refresh-row d-flex flex-row justify-space-around"
-               no-gutters>
+        <v-row class="refresh-row d-flex flex-row justify-space-around" no-gutters>
           <v-menu
-            top
-            :offset-x="true"
-            :offset-y="true"
+            location="top"
+            :close-on-content-click="false"
             class="white"
-            v-bind:close-on-content-click="false"
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template v-slot:activator="{ props }">
               <v-btn
-                v-bind="attrs"
-                v-on="on"
-                fab
+                v-bind="props"
+                icon
                 @click="clearFilter"
                 :disabled="labels.length <= 0"
               >
-                <v-icon>
-                  mdi-format-list-numbered
-                </v-icon>
+                <v-icon>mdi-format-list-numbered</v-icon>
               </v-btn>
             </template>
 
@@ -79,29 +72,17 @@
                 <v-card style="width: 100%;">
                   <v-card-title class="pa-1" style="width: 100%;">
                     <v-row class="pa-0 ma-0" style="width: 100%;">
-                      <v-col
-                        cols="1"
-                        class="pa-0 ma-0 justify-start align-center"
-                        style="height: 100%;"
-                      >
+                      <v-col cols="1" class="pa-0 ma-0 justify-start align-center" style="height: 100%;">
                         <h5>{{ index + 1 }})</h5>
                       </v-col>
-                      <v-col
-                        cols="9"
-                        class="pa-0 ma-0 justify-start align-center"
-                        style="height: 100%;"
-                      >
+                      <v-col cols="9" class="pa-0 ma-0 justify-start align-center" style="height: 100%;">
                         <h5>{{ label.product.name }}</h5>
                       </v-col>
-                      <v-col
-                        cols="2"
-                        class="pa-0 ma-0 justify-start align-center"
-                        style="height: 100%;"
-                      >
-                        <h6 class="grey--text text--darken-2" v-if="label.product.id">
+                      <v-col cols="2" class="pa-0 ma-0 justify-start align-center" style="height: 100%;">
+                        <h6 class="text-grey-darken-2" v-if="label.product.id">
                           {{ (label.weight).toFixed(3) }} / kg
                         </h6>
-                        <h6 class="grey--text text--darken-2" v-else>
+                        <h6 class="text-grey-darken-2" v-else>
                           {{ label.weight }}
                         </h6>
                       </v-col>
@@ -111,25 +92,21 @@
               </v-row>
             </v-container>
           </v-menu>
+
           <v-menu
-            top
-            :offset-x="true"
-            :offset-y="true"
+            location="top"
+            :close-on-content-click="false"
             class="white"
-            v-bind:close-on-content-click="false"
             v-model="searchOpened"
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template v-slot:activator="{ props }">
               <v-btn
-                v-bind="attrs"
-                v-on="on"
-                fab
+                v-bind="props"
+                icon
                 @click="clearFilter"
                 :disabled="inProgress"
               >
-                <v-icon>
-                  mdi-magnify
-                </v-icon>
+                <v-icon>mdi-magnify</v-icon>
               </v-btn>
             </template>
 
@@ -140,36 +117,23 @@
             </v-container>
           </v-menu>
         </v-row>
-        <v-row class="refresh-row d-flex flex-row justify-space-around"
-               no-gutters>
-          <v-btn
-            @click="cutTicket"
-            fab
-            :disabled="inProgress"
-          >
-            <v-icon>
-              mdi-scissors-cutting
-            </v-icon>
+        <v-row class="refresh-row d-flex flex-row justify-space-around" no-gutters>
+          <v-btn icon @click="cutTicket" :disabled="inProgress">
+            <v-icon>mdi-scissors-cutting</v-icon>
           </v-btn>
-          <v-btn
-            @click="refreshProducts"
-            fab
-            :disabled="inProgress"
-          >
-            <v-icon>
-              mdi-refresh
-            </v-icon>
+          <v-btn icon @click="refreshProducts" :disabled="inProgress">
+            <v-icon>mdi-refresh</v-icon>
           </v-btn>
         </v-row>
-        <v-divider v-if="lastSyncDate" class="white mb-6"></v-divider>
+        <v-divider v-if="lastSyncDate" color="white" class="mb-6"></v-divider>
         <v-row v-if="lastSyncDate" style="max-height: 10%">
           <v-col>
-            <h5 :class="isSynced?'white--text text-right':'orange--text text-right'">
+            <h5 :class="isSynced?'text-white text-right':'text-orange text-right'">
               MAJ produits :
             </h5>
           </v-col>
           <v-col>
-            <h5 :class="isSynced?'white--text':'orange--text'">
+            <h5 :class="isSynced?'text-white':'text-orange'">
               {{ lastSyncDate }}
             </h5>
           </v-col>
@@ -216,8 +180,8 @@ export default {
         this.filter = null;
       }
     },
-    scaleFrozen() {
-      if (this.scaleFrozen()) {
+    scaleFrozen(val) {
+      if (val) {
         this.showDialog = true;
       }
     },
@@ -261,13 +225,7 @@ export default {
       this.$store.dispatch('products/get');
     },
     cutTicket() {
-      print(
-        null,
-        null,
-        null,
-        null,
-        true,
-      );
+      print(null, null, null, null, true);
       this.$store.dispatch('ticket/reset');
     },
     pressed(value) {
@@ -304,7 +262,7 @@ export default {
     width: 100%;
     align-items: center;
   }
-  .theme--light.v-btn--active::before {
+  .v-btn--active::before {
     opacity: 0.4;
   }
 </style>

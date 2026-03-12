@@ -1,19 +1,23 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import fr from 'vuetify/lib/locale/fr';
+import 'vuetify/styles';
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+import { fr } from 'vuetify/locale';
 import '@mdi/font/css/materialdesignicons.css';
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
-  lang: {
-    locales: { fr },
-    current: 'fr',
+export default createVuetify({
+  components,
+  directives,
+  locale: {
+    locale: 'fr',
+    messages: { fr },
   },
   theme: {
     themes: {
       light: {
-        primary: '#445448',
+        colors: {
+          primary: '#445448',
+        },
       },
     },
   },

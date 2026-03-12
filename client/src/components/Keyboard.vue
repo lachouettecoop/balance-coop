@@ -1,6 +1,6 @@
 <template>
-  <v-container class="d-flex flex-column grey lighten-5 align-center">
-     <v-row style="width: 100%; height: 80px;" class="pa-0 ma-0">
+  <v-container class="d-flex flex-column bg-grey-lighten-5 align-center">
+    <v-row style="width: 100%; height: 80px;" class="pa-0 ma-0">
       <v-col cols="2" class="pa-0 ma-0">
         <v-btn v-if="!onlyNum"
                width="100px"
@@ -11,7 +11,7 @@
         </v-btn>
       </v-col>
       <v-col cols="8">
-        <h2 :class="isValid()?'pb-5':'red--text pb-5'" style="text-align: center">
+        <h2 :class="isValid()?'pb-5':'text-red pb-5'" style="text-align: center">
           {{ getValue() }}
         </h2>
       </v-col>

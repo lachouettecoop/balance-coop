@@ -74,6 +74,19 @@ def allow_all_origins(response):
     return response
 
 
+@app.route("/", defaults={"path": ""}, methods=["OPTIONS"])
+@app.route("/<path:path>", methods=["OPTIONS"])
+def handle_options(path):
+    if config.core.allow_all_origins:
+        from flask import make_response
+        resp = make_response()
+        resp.headers["Access-Control-Allow-Origin"] = "*"
+        resp.headers["Access-Control-Allow-Headers"] = "*"
+        resp.headers["Access-Control-Allow-Methods"] = "*"
+        return resp, 204
+    return "", 204
+
+
 @socket_io.on("connect")
 def on_connect():
     logging.info("Connected")

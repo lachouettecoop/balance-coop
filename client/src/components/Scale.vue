@@ -6,21 +6,21 @@
     <v-spacer></v-spacer>
     <v-row>
       <v-col>
-        <h2 :class="weight>0?'white--text text-right':'orange--text text-right'">Poids :</h2>
+        <h2 :class="weight>0?'text-white text-right':'text-orange text-right'">Poids :</h2>
       </v-col>
       <v-col>
-        <h2 :class="weight>0?'white--text':'orange--text'">{{ Number((weight).toFixed(3)) }}</h2>
+        <h2 :class="weight>0?'text-white':'text-orange'">{{ Number((weight).toFixed(3)) }}</h2>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <h3 :class="tare>0?'orange--text text-right':'white--text text-right'">Tare :</h3>
+        <h3 :class="tare>0?'text-orange text-right':'text-white text-right'">Tare :</h3>
       </v-col>
       <v-col>
-        <h3 :class="tare>0?'orange--text':'white--text'">{{ Number((tare).toFixed(3)) }}</h3>
+        <h3 :class="tare>0?'text-orange':'text-white'">{{ Number((tare).toFixed(3)) }}</h3>
       </v-col>
     </v-row>
-    <v-divider class="white"></v-divider>
+    <v-divider color="white"></v-divider>
   </v-container>
   <v-container
     v-else
@@ -28,14 +28,13 @@
   >
     <v-spacer></v-spacer>
     <v-row>
-      <h1 class="orange--text text-center">Balance non connectée</h1>
+      <h1 class="text-orange text-center">Balance non connectée</h1>
     </v-row>
-    <v-divider class="white"></v-divider>
+    <v-divider color="white"></v-divider>
   </v-container>
 </template>
 
 <script>
-
 export default {
   name: 'Scale',
   computed: {
@@ -53,7 +52,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>

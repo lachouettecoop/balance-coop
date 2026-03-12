@@ -5,7 +5,7 @@
   >
     <v-dialog
       v-if="selectedProduct"
-      v-model="selectedProduct"
+      v-model="showDialog"
       max-width="50%"
     >
       <Product :product="selectedProduct" selected @cancel="cancelSelection"/>
@@ -26,87 +26,78 @@
         color="primary"
       />
     </v-container>
-    <v-card v-else-if="bagsOfProducts.length > 0" flat cols="10" style="height: 100%">
-      <v-list-item-group
-        v-model="selectedProduct"
-        color="indigo"
-        style="height: 100%"
-      >
-        <v-card-actions class="justify-space-around" style="height: 10%">
-          <v-btn
-            depressed
-            outlined
-            x-large
-            @click="prev"
+    <v-card v-else-if="bagsOfProducts.length > 0" variant="flat" style="height: 100%">
+      <v-card-actions class="justify-space-around" style="height: 10%">
+        <v-btn
+          variant="outlined"
+          size="x-large"
+          @click="prev"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-item-group
+          v-model="onBoarding"
+          class="text-center d-flex justify-space-around"
+          mandatory
+          style="width: 100%"
+        >
+          <v-item
+            v-for="n in bagsOfProducts.length"
+            :key="`btn-${n}`"
+            v-slot="{ isSelected, toggle }"
           >
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-item-group
-            v-model="onBoarding"
-            class="text-center d-flex justify-space-around"
-            mandatory
-            style="width: 100%"
-          >
-            <v-item
-              v-for="n in bagsOfProducts.length"
-              :key="`btn-${n}`"
-              v-slot="{ active, toggle }"
+            <v-btn
+              :active="isSelected"
+              rounded
+              @click="toggle"
             >
-              <v-btn
-                :input-value="active"
-                rounded
-                @click="toggle"
-              >
-                <v-icon>
-                  mdi-record
-                </v-icon>
-                {{bagsOfProducts[n-1][0][0].name.substring(0, 2)}}.
-              </v-btn>
-            </v-item>
-          </v-item-group>
-          <v-btn
-            depressed
-            outlined
-            x-large
-            @click="next"
-          >
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </v-card-actions>
-        <v-window v-model="onBoarding" style="height: 85%">
-          <v-window-item
-            v-for="(page, p) in bagsOfProducts"
-            :key="`page-${p}`"
+              <v-icon>mdi-record</v-icon>
+              {{bagsOfProducts[n-1][0][0] ? bagsOfProducts[n-1][0][0].name.substring(0, 2) : ''}}
+            </v-btn>
+          </v-item>
+        </v-item-group>
+        <v-btn
+          variant="outlined"
+          size="x-large"
+          @click="next"
+        >
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </v-card-actions>
+      <v-window v-model="onBoarding" style="height: 85%">
+        <v-window-item
+          v-for="(page, p) in bagsOfProducts"
+          :key="`page-${p}`"
+          style="height: 100%"
+        >
+          <v-card
             style="height: 100%"
-          >
-            <v-card
-              style="height: 100%"
-              class="d-flex flex-column">
-              <v-row
-                v-for="(row, r) in page"
-                :key="`row-${r}`"
+            variant="flat"
+            class="d-flex flex-column">
+            <v-row
+              v-for="(row, r) in page"
+              :key="`row-${r}`"
+              class="pa-0 ma-0"
+              :style="`height: ${100/rowsNb}%`"
+            >
+              <v-col
+                v-for="(product, c) in row"
+                :key="`col-${c}`"
                 class="pa-0 ma-0"
-                :style="`height: ${100/rowsNb}%`"
               >
-                <v-col
-                  v-for="(product, c) in row"
-                  :key="`col-${c}`"
-                  class="pa-0 ma-0"
+                <div
+                  v-if="product"
+                  class="pa-0 ma-0 product-item"
+                  style="height: 100%; cursor: pointer;"
+                  @click="selectProduct(product)"
                 >
-                  <v-list-item
-                    v-if="product"
-                    class="pa-0 ma-0"
-                    style="height: 100%"
-                    three-line
-                    :value="product">
-                    <Product :product="product"/>
-                  </v-list-item>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-window-item>
-        </v-window>
-      </v-list-item-group>
+                  <Product :product="product"/>
+                </div>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-window-item>
+      </v-window>
     </v-card>
   </v-col>
 </template>
@@ -126,6 +117,7 @@ export default {
   },
   data: () => ({
     selectedProduct: null,
+    showDialog: false,
     onBoarding: 0,
     columnsNb: 4,
     rowsNb: 4,
@@ -150,16 +142,21 @@ export default {
         this.onBoarding -= 1;
       }
     },
+    selectProduct(product) {
+      this.selectedProduct = product;
+      this.showDialog = true;
+    },
     cancelSelection() {
       this.$emit('clearFilter');
       this.selectedProduct = null;
+      this.showDialog = false;
     },
   },
   computed: {
     bagsOfProducts() {
       const nbProductsByPage = this.columnsNb * this.rowsNb;
       const nbPages = Math.ceil(this.products.length / nbProductsByPage);
-      const bagsOfProducts = new Array(nbPages); // Page / Row / Column
+      const bagsOfProducts = new Array(nbPages);
       for (let p = 0; p < bagsOfProducts.length; p += 1) {
         bagsOfProducts[p] = new Array(this.rowsNb);
         for (let r = 0; r < this.rowsNb; r += 1) {
@@ -205,7 +202,7 @@ export default {
 </script>
 
 <style>
-  .v-list-item {
+  .product-item {
     width: 20vw;
     height: 20vh;
   }
