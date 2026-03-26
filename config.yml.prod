@@ -8,9 +8,32 @@ odoo:
       - ["categ_id", "in", [337]]
     legumes:
       - ["categ_id", "in", [418]]
-    vrac:
-      - ["name", "ilike", "vrac"]
-      - ["barcode", "ilike", "260%"]
+    #vrac:
+    #  - ["name", "ilike", "vrac"]
+    #  - ["barcode", "ilike", "260%"]
+    #viandes:
+    #  - [ "categ_id", "in", [ 350, 352]]
+  rnp:  # Replace name parts
+    - pattern: "- potager des rainettes -"
+      replacement: "- Pot. des Rai."
+    - pattern: "- le potager des rainettes -"
+      replacement: "- Pot. des Rai."
+    - pattern: "- B!o Toulousaine -"
+      replacement: "- B. Toul."
+    - pattern: "- Jardins de Loupiac -"
+      replacement: "- Jar. de Lou."
+    - pattern: "- Jardins de Loupiac-"
+      replacement: "- Jar. de Lou."
+    - pattern: "- Verger de F. -"
+      replacement: "- Ver. de F."
+    - pattern: "- Jardins du Girou -"
+      replacement: "- Jar. de Gir."
+    - pattern: "ETIC"
+      replacement: "- ETIC"
+    - pattern: "- Marty -"
+      replacement: "- Marty"
+    - pattern: "- Potager des R -"
+      replacement: "- Pot. des Rai."
   unp:  # Unnecessary name parts
     - vrac
     - au kg
@@ -19,20 +42,16 @@ odoo:
     - bio
     - prix
     - sous vide
-    - ss vide"
+    - ss vide
     - à la pièce
     - piece
     - pièce
     - maraîcher
     - conventionnel
     - barquette
-    - "- potager des rainettes -"
-    - "- le potager des rainettes -"
-    - "Belledonne"
-    - "EticMiam"
-    - "Ethik Ess"
-    - "ETIC"
-    - "Fermes de Chassagne"
+    - "\\(toutes variétés\\)"
+    - "- toute variété -"
+    - toute variété
 
 printer:
   ip: 192.168.70.106

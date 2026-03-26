@@ -9,8 +9,6 @@ from typing import Dict, List, AnyStr
 
 from api import config
 
-unp = [re.compile(p, re.IGNORECASE) for p in config.odoo.unp]
-
 CONTEXT = os.getenv("NO_SSL")
 DATA_PATH = os.getenv("DATA_PATH", "./data/odoo.json")
 
@@ -83,10 +81,13 @@ def _consolidate(products: List[Dict], category: AnyStr) -> List[Dict]:
             product["id"] = int(product["barcode"][3:7])
         else:
             product["id"] = None
-        product["category"] = category
         name = product["name"]
-        for p in unp:
-            name = p.sub("", name)
+        product["category"] = category
+
+        for rnp in config.odoo.rnp:
+            name = re.compile(rnp.pattern, re.IGNORECASE).sub(rnp.replacement, name)
+        for pattern in config.odoo.unp:
+            name = re.compile(pattern, re.IGNORECASE).sub("", name)
         product["name"] = name.strip()
     return products
 
