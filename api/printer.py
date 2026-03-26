@@ -66,12 +66,15 @@ def print_product_label(product, nb, weight, discount=0.0, cut=False, retry=0):
             else:
                 printer.set(align="center", bold=True, double_width=True, double_height=True)
                 printer.ln()
-                printer.textln(f"Quantité: {weight}")
-                printer.set(align="center", bold=True)
-                if product.get("barcode"):
-                    printer.ln()
-                    printer.barcode(product.get("barcode"), "EAN13", height=175, width=3)
-
+                for i in range(weight):
+                    printer.textln(f"Produit: {i+1}/{weight}")
+                    printer.set(align="center", bold=True)
+                    if product.get("barcode"):
+                        printer.ln()
+                        printer.barcode(product.get("barcode"), "EAN13", height=175, width=3)
+                        if (i+1) < weight:
+                            printer.ln()
+                            printer.textln("---")
             printer.ln()
             printer.textln("---")
             printer.ln()

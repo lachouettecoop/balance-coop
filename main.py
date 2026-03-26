@@ -28,7 +28,7 @@ dictConfig(
                 "formatter": "default",
             }
         },
-        "root": {"level": "DEBUG", "handlers": ["wsgi"]},
+        "root": {"level": "INFO", "handlers": ["wsgi"]},
     }
 )
 logging.getLogger("werkzeug").setLevel(logging.WARN)
