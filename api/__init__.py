@@ -18,8 +18,7 @@ SCHEMA = Dict(
                 "user": Str(),
                 "passwd": Str(),
                 "categories": Dict(extra=(Str(), List(Any()))),
-                "rnp": List(Dict({"pattern": Str(), "replacement": Str()})),
-                "unp": List(Str()),
+                "replacements": List(Dict({"replacement": Str(), "patterns": List(Str())})),
             }
         ),
         "printer": Dict({"ip": Str()}),

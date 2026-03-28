@@ -13,45 +13,50 @@ odoo:
     #  - ["barcode", "ilike", "260%"]
     #viandes:
     #  - [ "categ_id", "in", [ 350, 352]]
-  rnp:  # Replace name parts
-    - pattern: "- potager des rainettes -"
-      replacement: "- Pot. des Rai."
-    - pattern: "- le potager des rainettes -"
-      replacement: "- Pot. des Rai."
-    - pattern: "- B!o Toulousaine -"
-      replacement: "- B. Toul."
-    - pattern: "- Jardins de Loupiac -"
-      replacement: "- Jar. de Lou."
-    - pattern: "- Jardins de Loupiac-"
-      replacement: "- Jar. de Lou."
-    - pattern: "- Verger de F. -"
-      replacement: "- Ver. de F."
-    - pattern: "- Jardins du Girou -"
-      replacement: "- Jar. de Gir."
-    - pattern: "ETIC"
-      replacement: "- ETIC"
-    - pattern: "- Marty -"
-      replacement: "- Marty"
-    - pattern: "- Potager des R -"
-      replacement: "- Pot. des Rai."
-  unp:  # Unnecessary name parts
-    - vrac
-    - au kg
-    - 1 kg
-    - 1kg
-    - bio
-    - prix
-    - sous vide
-    - ss vide
-    - à la pièce
-    - piece
-    - pièce
-    - maraîcher
-    - conventionnel
-    - barquette
-    - "\\(toutes variétés\\)"
-    - "- toute variété -"
-    - toute variété
+  replacements:
+    - replacement: "| Pot. des Rai."
+      patterns:
+        - "- le potager des rainettes -"
+        - "- potager des rainettes -"
+        - "- Potager des R -"
+    - replacement: "| B. Toul."
+      patterns:
+        - "- B!o Toulousaine -"
+    - replacement: "| Jar. de Lou."
+      patterns:
+        - "- Jardins de Loupiac -"
+        - "- Jardins de Loupiac-"
+    - replacement: "| Ver. de F."
+      patterns:
+        - "- Verger de F. -"
+    - replacement: "| Jar. de Gir."
+      patterns:
+        - "- Jardins du Girou -"
+    - replacement: "| ETIC"
+      patterns:
+        - "ETIC"
+    - replacement: "| Marty"
+      patterns:
+        - "- Marty -"
+    - replacement: ""
+      patterns:
+        - vrac
+        - au kg
+        - 1 kg
+        - 1kg
+        - bio
+        - prix
+        - sous vide
+        - ss vide
+        - à la pièce
+        - piece
+        - pièce
+        - maraîcher
+        - conventionnel
+        - barquette
+        - "\\(toutes variétés\\)"
+        - "- toute variété -"
+        - toute variété
 
 printer:
   ip: 192.168.70.106
