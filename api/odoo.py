@@ -84,10 +84,9 @@ def _consolidate(products: List[Dict], category: AnyStr) -> List[Dict]:
         name = product["name"]
         product["category"] = category
 
-        for rnp in config.odoo.rnp:
-            name = re.compile(rnp.pattern, re.IGNORECASE).sub(rnp.replacement, name)
-        for pattern in config.odoo.unp:
-            name = re.compile(pattern, re.IGNORECASE).sub("", name)
+        for r in config.odoo.replacements:
+            for p in r.patterns:
+                name = re.compile(p, re.IGNORECASE).sub(r.replacement, name)
         product["name"] = name.strip()
     return products
 
